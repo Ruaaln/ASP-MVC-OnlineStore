@@ -1,0 +1,16 @@
+﻿@model Category
+
+
+<form asp-controller="Category" asp-action="AddCategory" method="post" class="card-body">
+    <div asp-validation-summary="All"></div>
+
+    <div class="form-group">
+        <label asp-for="Name">Name</label>
+        <input type="text" class="form-control" asp-for="Name" placeholder="Enter Name">
+        <span asp-validation-for="Name"></span>
+    </div>
+
+    <div class="card-footer">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+</form>

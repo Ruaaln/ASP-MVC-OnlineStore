@@ -1,0 +1,20 @@
+﻿@model List<DashBoardGetAll>
+
+
+@foreach(var item in @Model)
+{
+    <div class="col-lg-3 col-6">    
+        <!-- small box -->
+        <div class="small-box bg-info">
+            <div class="inner">
+                <h3>@item.Count</h3>
+
+                <p>@item.Name</p>
+            </div>
+            <div class="icon">
+                <i class="ion ion-bag"></i>
+            </div>
+            <a asp-controller=@item.controllerName asp-action=@item.ctionName class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+}

@@ -1,0 +1,43 @@
+﻿@model List<Product>
+
+
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Product Table</h3>
+        <a asp-controller="Product" asp-action="AddProduct" class="btn btn-primary">+ New Product</a>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th style="width: 10px">#</th>
+                    <th>C.Id</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Count</th>
+                    <th>CreatedAt</th>
+                    <th>Category</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var product in Model)
+                {
+                    <tr>
+                        <td>@product.Id</td>
+                        <td>@product.CategoryId</td>
+                        <td>@product.Name</td>
+                        <td>@product.Description</td>
+                        <td>@product.Price$</td>
+                        <td>@product.ProductCount</td>
+                        <td>@product.CreatedAt</td>
+                        <td>@product.Category</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+
