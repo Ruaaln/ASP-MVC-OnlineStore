@@ -1,6 +1,7 @@
 ﻿using Lesson9_Online_Store_DataAccess.Repositories.Abstracts;
 using Lesson9_Online_Store_DataAccess.Repositories.Concrete;
 using Lesson9_Online_Store_Domain.Entities.Concretes;
+using Lesson9_Online_Store_Services.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
 
@@ -8,40 +9,44 @@ namespace Lesson9_Online_Store_MVC.Controllers;
 
 public class ProductController : Controller
 {
-    private readonly IProductRepository _productRepository;
-    private readonly ICategoryRepository _categoryRepository;
+    private readonly IProductService _productService;
 
-    public ProductController(IProductRepository productRepository, ICategoryRepository categoryRepository)
+    public ProductController(IProductService productService)
     {
-        _productRepository = productRepository;
-        _categoryRepository = categoryRepository;
+        _productService = productService;
     }
 
-
     [HttpGet]
-    public async Task<IActionResult> GetAllProduct() => View(await _productRepository.GetAllAsync());
-
+    public async Task<IActionResult> GetAllProduct()
+    {
+        var result = await _productService.GetAllAsync();
+        return View(result.Data ?? new List<Product>());
+    }
 
     [HttpGet]
     public async Task<IActionResult> AddProduct()
     {
-        ViewBag.Categories = await _categoryRepository.GetAllAsync();
+        var cats = await _productService.GetCategoriesAsync();
+        ViewBag.Categories = cats.Data ?? new List<Category>();
         return View();
     }
 
     [HttpPost]
     public async Task<IActionResult> AddProduct(Product product)
     {
-        if (!ModelState.IsValid)
+        var result = await _productService.CreateAsync(product);
+
+        if (!result.IsSuccess)
         {
-            ViewBag.Categories = await _categoryRepository.GetAllAsync();
+            foreach (var err in result.Errors)
+                ModelState.AddModelError(string.Empty, err);
+
+            var cats = await _productService.GetCategoriesAsync();
+            ViewBag.Categories = cats.Data ?? new List<Category>();
+
             return View(product);
         }
 
-        await _productRepository.AddAsync(product);
         return RedirectToAction(nameof(GetAllProduct));
     }
-
-
-
 }
